@@ -28,7 +28,7 @@ func Unpack(input string) (string, error) {
 		prev = string(r)
 	}
 
-	builder.WriteString(string(prev))
+	builder.WriteString(prev)
 
 	return builder.String(), nil
 }
