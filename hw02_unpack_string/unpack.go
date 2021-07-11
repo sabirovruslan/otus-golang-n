@@ -11,25 +11,24 @@ var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(input string) (string, error) {
 	var builder strings.Builder
-	var prev strings.Builder
+	prev := ""
 	for _, r := range input {
 		if unicode.IsDigit(r) {
-			if prev.Len() == 0 {
+			if len(prev) == 0 {
 				return "", ErrInvalidString
 			}
 
 			number, _ := strconv.Atoi(string(r))
-			builder.WriteString(strings.Repeat(prev.String(), number))
-			prev.Reset()
+			builder.WriteString(strings.Repeat(prev, number))
+			prev = ""
 			continue
 		}
 
-		builder.WriteString(prev.String())
-		prev.Reset()
-		prev.WriteString(string(r))
+		builder.WriteString(prev)
+		prev = string(r)
 	}
 
-	builder.WriteString(prev.String())
+	builder.WriteString(string(prev))
 
 	return builder.String(), nil
 }
