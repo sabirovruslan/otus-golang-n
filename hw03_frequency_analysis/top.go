@@ -34,7 +34,7 @@ func Top10(text string) []string {
 
 func getSortedKeys(wordsMap map[int][]string) []int {
 	var keys = make([]int, 0, topLen)
-	for k, _ := range wordsMap {
+	for k := range wordsMap {
 		keys = append(keys, k)
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(keys)))
