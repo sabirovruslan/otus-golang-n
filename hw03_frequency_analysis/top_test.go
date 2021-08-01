@@ -80,3 +80,61 @@ func TestTop10(t *testing.T) {
 		}
 	})
 }
+
+type test struct {
+	input    string
+	expected []string
+}
+
+func TestTop10Empty(t *testing.T) {
+	for _, tst := range [...]test{
+		{
+			input: "",
+		},
+		{
+			input: " ",
+		},
+		{
+			input: "   ",
+		},
+		{
+			input: " \n ",
+		},
+		{
+			input: " \n\t ",
+		},
+	} {
+		require.Len(t, Top10(tst.input), 0)
+	}
+}
+
+func TestTop10SpecialCharts(t *testing.T) {
+	for _, tst := range [...]test{
+		{
+			input:    "test",
+			expected: []string{"test"},
+		},
+		{
+			input:    " test ",
+			expected: []string{"test"},
+		},
+		{
+			input:    " test\nnil\tnil",
+			expected: []string{"nil", "test"},
+		},
+		{
+			input:    " test\n1\t1",
+			expected: []string{"1", "test"},
+		},
+		{
+			input:    "  1 1 11",
+			expected: []string{"1", "11"},
+		},
+		{
+			input:    "test\n1\t1   1 \t test, test 1",
+			expected: []string{"1", "test", "test,"},
+		},
+	} {
+		require.ElementsMatch(t, tst.expected, Top10(tst.input))
+	}
+}
