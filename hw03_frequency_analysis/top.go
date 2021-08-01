@@ -6,12 +6,12 @@ import (
 )
 
 const (
-	topResultLen = 10
-	topLen       = 30
+	top10Len = 10
+	topLen   = 30
 )
 
 func Top10(text string) []string {
-	var result = make([]string, 0, topResultLen)
+	var result = make([]string, 0, top10Len)
 	if len(text) == 0 {
 		return result
 	}
@@ -25,8 +25,8 @@ func Top10(text string) []string {
 		result = append(result, words...)
 	}
 
-	if len(result) > topResultLen {
-		return result[:topResultLen]
+	if len(result) > top10Len {
+		return result[:top10Len]
 	}
 
 	return result
