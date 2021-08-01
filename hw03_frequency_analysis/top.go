@@ -11,7 +11,7 @@ const (
 )
 
 func Top10(text string) []string {
-	var result = make([]string, 0, top10Len)
+	result := make([]string, 0, top10Len)
 	if len(text) == 0 {
 		return result
 	}
@@ -33,7 +33,7 @@ func Top10(text string) []string {
 }
 
 func getSortedKeys(wordsMap map[int][]string) []int {
-	var keys = make([]int, 0, topLen)
+	keys := make([]int, 0, topLen)
 	for k := range wordsMap {
 		keys = append(keys, k)
 	}
@@ -43,12 +43,12 @@ func getSortedKeys(wordsMap map[int][]string) []int {
 }
 
 func splitWordByFrequency(text string) map[int][]string {
-	var dict = make(map[string]int)
+	dict := make(map[string]int)
 	for _, s := range strings.Fields(text) {
 		dict[s]++
 	}
 
-	var result = make(map[int][]string, topLen)
+	result := make(map[int][]string, topLen)
 	for word, cnt := range dict {
 		result[cnt] = append(result[cnt], word)
 	}
