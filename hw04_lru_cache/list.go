@@ -64,9 +64,13 @@ func (l *list) PushBack(v interface{}) *ListItem {
 
 func (l *list) Remove(i *ListItem) {
 	switch {
+	case i.Next == nil && i.Prev == nil:
+		l.headItem, l.tailItem = nil, nil
 	case i.Next == nil:
+		i.Prev.Next = nil
 		l.tailItem = i.Prev
 	case i.Prev == nil:
+		i.Next.Prev = nil
 		l.headItem = i.Next
 	default:
 		i.Prev.Next, i.Next.Prev = i.Next, i.Prev
@@ -76,7 +80,14 @@ func (l *list) Remove(i *ListItem) {
 }
 
 func (l *list) MoveToFront(i *ListItem) {
+	if (i.Next == nil && i.Prev == nil) || (i.Prev == nil) {
+		return
+	}
 
+	l.Remove(i)
+	i.Prev, i.Next, l.headItem.Prev = nil, l.headItem, i
+	l.headItem = i
+	l.size++
 }
 
 func NewList() List {
