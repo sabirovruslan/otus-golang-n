@@ -1,9 +1,6 @@
 package hw04lrucache
 
 import (
-	"math/rand"
-	"strconv"
-	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -49,31 +46,49 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
-	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+	t.Run("excess capacity", func(t *testing.T) {
+		c := NewCache(2)
+
+		c.Set("first", 1)
+		c.Set("second", "test")
+		c.Set("excess", 3)
+
+		_, ok := c.Get("first")
+		require.False(t, ok)
+
+		_, ok = c.Get("second")
+		require.True(t, ok)
+
+		_, ok = c.Get("excess")
+		require.True(t, ok)
 	})
-}
 
-func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
-
-	c := NewCache(10)
-	wg := &sync.WaitGroup{}
-	wg.Add(2)
-
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1_000_000; i++ {
-			c.Set(Key(strconv.Itoa(i)), i)
+	t.Run("frequency crowding", func(t *testing.T) {
+		c := NewCache(4)
+		for _, i := range []string{"1", "2", "3", "4"} {
+			c.Set(Key(i), i)
 		}
-	}()
 
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 1_000_000; i++ {
-			c.Get(Key(strconv.Itoa(rand.Intn(1_000_000))))
+		_, ok := c.Get("1")
+		require.True(t, ok)
+
+		c.Set("5", 5)
+
+		_, ok = c.Get("2")
+		require.False(t, ok)
+	})
+
+	t.Run("clear cache", func(t *testing.T) {
+		c := NewCache(4)
+		for _, i := range []string{"1", "2", "3", "4"} {
+			c.Set(Key(i), i)
 		}
-	}()
 
-	wg.Wait()
+		_, ok := c.Get("1")
+		require.True(t, ok)
+
+		c.Clear()
+		_, ok = c.Get("1")
+		require.False(t, ok)
+	})
 }
